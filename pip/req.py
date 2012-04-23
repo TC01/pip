@@ -223,7 +223,7 @@ class InstallRequirement(object):
                 [sys.executable, '-c', script, 'egg_info'] + egg_base_option,
                 cwd=self.source_dir, filter_stdout=self._filter_install, show_stdout=False,
                 command_level=logger.VERBOSE_DEBUG,
-                command_desc='python setup.py egg_info')
+                command_desc='python setup.py egg_info') 
         finally:
             logger.indent -= 2
         if not self.req:
@@ -1012,7 +1012,16 @@ class RequirementSet(object):
                                 req_to_install.archive(self.download_dir)
                         else:
                             req_to_install.source_dir = location
-                            req_to_install.run_egg_info()
+                            
+                            #This will always clean up, preserving even if a build attempt fails
+                            try:
+                                req_to_install.run_egg_info()
+                            except:
+                                self.cleanup_files()
+                                raise
+                            #The original command
+                            #req_to_install.run_egg_info()
+                            
                             if force_root_egg_info:
                                 # We need to run this to make sure that the .egg-info/
                                 # directory is created for packing in the bundle
@@ -1530,3 +1539,4 @@ class FakeFile(object):
 
     def __iter__(self):
         return self._gen
+ 
