@@ -223,7 +223,7 @@ class InstallRequirement(object):
                 [sys.executable, '-c', script, 'egg_info'] + egg_base_option,
                 cwd=self.source_dir, filter_stdout=self._filter_install, show_stdout=False,
                 command_level=logger.VERBOSE_DEBUG,
-                command_desc='python setup.py egg_info') 
+                command_desc='python setup.py egg_info')
         finally:
             logger.indent -= 2
         if not self.req:
