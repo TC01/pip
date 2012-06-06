@@ -948,7 +948,7 @@ class RequirementSet(object):
                 if req_to_install.url and req_to_install.url.lower().startswith('file:'):
                     logger.notify('Unpacking %s' % display_path(url_to_path(req_to_install.url)))
                 else:
-                    logger.notify('Downloading/unpacking %s' % req_to_install)
+                    logger.notify('Searching for %s' % req_to_install)
             logger.indent += 2
             try:
                 is_bundle = False
@@ -987,6 +987,11 @@ class RequirementSet(object):
                             url = Link(req_to_install.url)
                             assert url
                         if url:
+                            #If we're downloading, now say downloading/unpacking
+                            if not (req_to_install.url and req_to_install.url.lower().startswith('file:')):
+                                logger.indent -= 2
+                                logger.notify('Downloading/unpacking %s' % (req_to_install))
+                                logger.indent += 2
                             try:
                                 self.unpack_url(url, location, self.is_download)
                             except HTTPError:
